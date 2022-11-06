@@ -1,26 +1,29 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import './App.module.css'
+import {Navbar} from './components/Navbar/Navbar'
+import {Body} from './components/Body/Body'
+import React, {useEffect} from 'react'
+import {Header} from './components/Header/Header'
+import {useAppDispatch, useAppSelector} from './hooks/hooks'
+import Preload from './components/common/Preload/Preload'
+import {getInitialized} from './redux/appSelectors'
+import {initializeAppTC} from './redux/appReducer'
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export const App = () => {
+    const dispatch = useAppDispatch()
+
+    const initialized = useAppSelector(getInitialized)
+
+    useEffect(() => {
+        dispatch(initializeAppTC())
+    }, [dispatch])
+
+    return (
+        !initialized ? <Preload/>
+            : <div className="app-wrapper">
+                <Header/>
+                <Navbar/>
+                <Body/>
+            </div>
+
+    )
 }
-
-export default App;
